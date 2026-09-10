@@ -635,13 +635,13 @@ function buildTextParticles(lines) {
   });
   const w = c.width, h = c.height;
   const d = ctx.getImageData(0, 0, w, h).data;
-  // 放在主图下方偏后，正面不穿模，侧转时更清晰
+  // 放在主图上方偏后，正面不穿模，侧转时更清晰
   const worldH = isMobile() ? (isPortrait() ? 1.7 : 1.9) : 2.15;
   const worldW = worldH * (w / h);
   const cell = Math.max(worldW / w, worldH / h);
   const pos = [], col = [], base = [], start = [];
   const step = isMobile() ? 3 : 2;
-  const yOff = isMobile() ? (isPortrait() ? -3.55 : -3.35) : -3.7;
+  const yOff = isMobile() ? (isPortrait() ? 3.45 : 3.25) : 3.55;
   const zOff = -2.35;
   for (let y = 0; y < h; y += step) {
     for (let x = 0; x < w; x += step) {
