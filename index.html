@@ -217,6 +217,7 @@ let textBase, textStart;
 let assemble = 0, bqAssemble = 0, giftAssemble = 0, bqExplode = 0, textAssemble = 0, started = false, assembled = false, musicOn = true;
 let giftShake = 0;
 let canExit = false;
+let bqReadyAt = 0;
 let spinYaw = 1, spinPitch = 0;
 let phase = 'idle'; // gift -> bouquet -> bqExplode -> main -> done
 const isMobile = () => Math.min(innerWidth, innerHeight) < 700 || /Mobi|Android|iPhone/i.test(navigator.userAgent);
@@ -905,6 +906,10 @@ function init() {
     }
 
     if (phase === 'bouquet' && bqAssemble >= 1) {
+      if (!bqReadyAt || Date.now() - bqReadyAt < 4500) {
+        lastTap = now;
+        return;
+      }
       phase = 'bqExplode';
       bqExplode = 0;
       assemble = 0;
@@ -1001,7 +1006,7 @@ function animate(t) {
   }
 
   if (phase === 'bouquet' && bouquetGroup && bqBase) {
-    bqAssemble = Math.min(1, bqAssemble + 0.011);
+    bqAssemble = Math.min(1, bqAssemble + 0.0055);
     const be = easeOutQuint(bqAssemble);
     const ba = bouquetGroup.geometry.attributes.position.array;
     for (let i = 0; i < bqBase.length; i++) {
@@ -1013,8 +1018,12 @@ function animate(t) {
     setProgress(be, true);
     tipEl.textContent = '\u82b1\u675f\u751f\u6210\u4e2d ' + Math.round(be * 100) + '%';
     if (bqAssemble >= 1) {
+      if (!bqReadyAt) bqReadyAt = Date.now();
       setProgress(1, false);
-      tipEl.textContent = '\u70b9\u51fb\u82b1\u675f\u7efd\u653e\uff0c\u6c47\u805a\u6210\u4e3b\u56fe';
+      const waitLeft = Math.max(0, 4500 - (Date.now() - bqReadyAt));
+      tipEl.textContent = waitLeft > 0
+        ? ('\u6b23\u8d4f\u82b1\u675f\u4e2d\u2026 ' + Math.ceil(waitLeft / 1000) + 's')
+        : '\u70b9\u51fb\u82b1\u675f\u7efd\u653e\uff0c\u6c47\u805a\u6210\u4e3b\u56fe';
       tipEl.classList.add('show');
       bouquetGroup.position.y = Math.sin(time * 1.1) * 0.05;
       bouquetGroup.rotation.z = Math.sin(time * 0.9) * 0.025;
@@ -1087,7 +1096,7 @@ function animate(t) {
         canExit = true;
         tipEl.textContent = '\u70b9\u51fb\u9000\u51fa\u753b\u9762';
         tipEl.classList.add('show');
-      }, 3000);
+      }, 10000);
       document.getElementById('textOverlay').classList.add('show');
       musicBtn.classList.add('show');
       sparkGroup.material.opacity = 0.65;
