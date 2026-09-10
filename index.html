@@ -60,6 +60,11 @@ canvas{display:block}
 #giftSpecialText{color:#fff;font-size:clamp(1.2rem,5vw,1.9rem);font-weight:700;letter-spacing:5px;text-align:center;padding:0 24px;line-height:1.7;opacity:0;transform:scale(.7);text-shadow:0 0 20px rgba(255,150,180,.95),0 0 40px rgba(255,100,140,.5),0 4px 16px rgba(0,0,0,.55)}
 #giftMsgScreen.show #giftSpecialText{animation:giftTextPop 2s ease forwards}
 @keyframes giftTextPop{0%{opacity:0;transform:translateY(18px) scale(.7)}22%{opacity:1;transform:translateY(0) scale(1.1)}40%{transform:translateY(0) scale(.97)}60%{transform:translateY(0) scale(1.03)}100%{opacity:1;transform:translateY(0) scale(1)}}
+#endScreen{position:fixed;inset:0;z-index:1100;display:none;justify-content:center;align-items:center;background:radial-gradient(ellipse at center,rgba(36,16,26,.95) 0%,#000 72%);opacity:0;transition:opacity .8s;pointer-events:none}
+#endScreen.show{display:flex;opacity:1}
+#endText{color:#fff;font-size:clamp(1.15rem,5vw,1.75rem);font-weight:700;letter-spacing:4px;text-align:center;padding:0 24px;line-height:1.8;opacity:0;transform:translateY(14px) scale(.92);text-shadow:0 0 18px rgba(255,150,180,.9),0 0 36px rgba(255,100,140,.45),0 4px 14px rgba(0,0,0,.5)}
+#endScreen.show #endText{animation:endTextIn 1.4s ease forwards}
+@keyframes endTextIn{0%{opacity:0;transform:translateY(16px) scale(.9)}100%{opacity:1;transform:translateY(0) scale(1)}}
 @media (max-width:640px){
 #entryText{font-size:1.2rem;padding:0 18px;letter-spacing:1px}
 #entryHint{font-size:.85rem;margin-top:18px}
@@ -99,6 +104,9 @@ canvas{display:block}
 </div>
 <div id="giftMsgScreen">
   <div id="giftSpecialText">特殊的花送给特别的你</div>
+</div>
+<div id="endScreen">
+  <div id="endText">给今日份的你加一份开心</div>
 </div>
 <div id="sceneContainer"></div>
 <div id="fadeOverlay"></div>
@@ -702,9 +710,14 @@ function exitScene() {
   sc.style.opacity = 0;
   const fade = document.getElementById('fadeOverlay');
   fade.style.opacity = 1;
+  const endScreen = document.getElementById('endScreen');
+  setTimeout(() => {
+    endScreen.style.display = 'flex';
+    void endScreen.offsetWidth;
+    endScreen.classList.add('show');
+  }, 700);
   if (music) {
-    const startV = music.volume;
-    let v = startV;
+    let v = music.volume;
     const fi = setInterval(() => {
       v -= 0.05;
       if (v <= 0) { music.pause(); music.volume = 0; clearInterval(fi); }
