@@ -2,11 +2,11 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>教师节快乐💐</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:-apple-system,BlinkMacSystemFont,"Microsoft YaHei",sans-serif}
+html,body{width:100%;height:100%;height:100dvh;overflow:hidden;background:#000;font-family:-apple-system,BlinkMacSystemFont,"Microsoft YaHei",sans-serif;touch-action:none;-webkit-text-size-adjust:100%}
 #entryScreen{position:fixed;inset:0;z-index:1000;display:flex;flex-direction:column;justify-content:center;align-items:center;background:linear-gradient(135deg,#1a2840,#2a4a3a);color:#fff;cursor:pointer;transition:opacity .5s}
 #entryText{font-size:1.6rem;text-align:center;padding:0 24px;line-height:1.6;text-shadow:0 0 10px rgba(255,182,193,.7);animation:pulse 1.5s infinite alternate}
 #entryHint{font-size:.95rem;opacity:.7;margin-top:28px}
@@ -29,7 +29,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:-ap
 #textOverlay.show .line1 .ch,#textOverlay.show .line2 .ch{animation:charIn .7s ease forwards}
 @keyframes charIn{to{opacity:1;transform:translateY(0);filter:blur(0)}}
 .line1 .ch.hl{background:linear-gradient(180deg,#fff,#ffc0d0 55%,#ff8aa8);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:none;filter:drop-shadow(0 0 8px rgba(255,140,170,.55))}
-@media (max-width:640px){#textOverlay{padding-bottom:88px}#textOverlay .bless-card{padding:14px 16px 12px}.line1{letter-spacing:.16em}.line2{letter-spacing:.1em}}
+
 #srcImg{position:fixed;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none}
 canvas{display:block}
 
@@ -46,7 +46,7 @@ canvas{display:block}
 #giftScreen.show{display:block;opacity:1}
 .gift-title{position:absolute;left:50%;top:10vh;transform:translateX(-50%);color:#fff;font-size:1.15rem;text-shadow:0 2px 14px rgba(255,120,150,.55),0 2px 10px rgba(0,0,0,.55);letter-spacing:3px;white-space:nowrap;pointer-events:none}
 .gift-btns{position:absolute;right:max(18px,8vw);top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:16px;pointer-events:auto;z-index:2}
-@media (max-width:640px){.gift-btns{right:auto;left:50%;top:auto;bottom:12vh;transform:translateX(-50%);flex-direction:row;gap:18px}.gift-title{font-size:1rem;top:8vh}}
+
 .gift-btn{min-width:92px;padding:13px 24px;border:none;border-radius:999px;font-size:1.15rem;font-weight:700;cursor:pointer;letter-spacing:3px;transition:transform .15s,box-shadow .15s;font-family:inherit;-webkit-tap-highlight-color:transparent}
 .gift-btn.accept{background:linear-gradient(135deg,#ff8aa3,#e83a62);color:#fff;box-shadow:0 8px 22px rgba(232,58,98,.5),0 0 18px rgba(255,150,180,.25)}
 .gift-btn.reject{background:rgba(20,20,28,.45);color:#fff;border:1px solid rgba(255,255,255,.4);backdrop-filter:blur(6px)}
@@ -60,6 +60,27 @@ canvas{display:block}
 #giftSpecialText{color:#fff;font-size:clamp(1.2rem,5vw,1.9rem);font-weight:700;letter-spacing:5px;text-align:center;padding:0 24px;line-height:1.7;opacity:0;transform:scale(.7);text-shadow:0 0 20px rgba(255,150,180,.95),0 0 40px rgba(255,100,140,.5),0 4px 16px rgba(0,0,0,.55)}
 #giftMsgScreen.show #giftSpecialText{animation:giftTextPop 2s ease forwards}
 @keyframes giftTextPop{0%{opacity:0;transform:translateY(18px) scale(.7)}22%{opacity:1;transform:translateY(0) scale(1.1)}40%{transform:translateY(0) scale(.97)}60%{transform:translateY(0) scale(1.03)}100%{opacity:1;transform:translateY(0) scale(1)}}
+@media (max-width:640px){
+#entryText{font-size:1.2rem;padding:0 18px;letter-spacing:1px}
+#entryHint{font-size:.85rem;margin-top:18px}
+#textOverlay{padding:0 14px calc(72px + env(safe-area-inset-bottom,0px))}
+#textOverlay .bless-card{padding:12px 14px 10px;border-radius:14px;max-width:94vw}
+.line1{letter-spacing:.12em;font-size:clamp(1rem,4.6vw,1.25rem)}
+.line2{letter-spacing:.08em;font-size:clamp(.88rem,3.8vw,1.05rem);margin-top:8px}
+#sceneTip{left:12px;right:12px;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:none;width:auto;max-width:none;white-space:normal;text-align:center;font-size:12px;letter-spacing:1px;line-height:1.45;padding:8px 12px}
+#progressBar{bottom:calc(52px + env(safe-area-inset-bottom,0px));width:min(200px,58vw)}
+#musicBtn{left:calc(12px + env(safe-area-inset-left,0px));bottom:calc(14px + env(safe-area-inset-bottom,0px));width:40px;height:40px}
+.gift-title{font-size:.95rem;top:calc(7vh + env(safe-area-inset-top,0px));letter-spacing:2px;white-space:normal;width:90%;text-align:center}
+.gift-btns{right:auto;left:50%;top:auto;bottom:calc(10vh + env(safe-area-inset-bottom,0px));transform:translateX(-50%);flex-direction:row;gap:16px}
+.gift-btn{min-width:84px;padding:12px 20px;font-size:1.05rem}
+#giftRejectTip{bottom:calc(4vh + env(safe-area-inset-bottom,0px));font-size:.88rem;padding:0 16px;text-align:center}
+#giftSpecialText{font-size:clamp(1.05rem,5.2vw,1.45rem);letter-spacing:3px;padding:0 18px;line-height:1.65}
+}
+@media (max-width:640px) and (orientation:landscape){
+#textOverlay{padding-bottom:58px}
+.gift-btns{bottom:8vh}
+.gift-title{top:4vh;font-size:.9rem}
+}
 </style>
 </head>
 <body>
@@ -198,7 +219,18 @@ let giftShake = 0;
 let canExit = false;
 let spinYaw = 1, spinPitch = 0;
 let phase = 'idle'; // gift -> bouquet -> bqExplode -> main -> done
+const isMobile = () => Math.min(innerWidth, innerHeight) < 700 || /Mobi|Android|iPhone/i.test(navigator.userAgent);
+const isPortrait = () => innerHeight >= innerWidth;
 let camZ0 = 11.5, camZ1 = 9.4;
+function applyMobileView() {
+  if (isMobile()) {
+    if (isPortrait()) { camZ0 = 13.2; camZ1 = 10.6; }
+    else { camZ0 = 11.8; camZ1 = 9.6; }
+  } else {
+    camZ0 = 11.5; camZ1 = 9.4;
+  }
+}
+applyMobileView();
 let bloomTarget = 0.2, camZTarget = 11.5;
 let progressEl, progressFill;
 const raycaster = new THREE.Raycaster();
@@ -336,8 +368,8 @@ function makePoints(pos, col, size, map, opacity = 1, blend = THREE.NormalBlendi
 }
 
 function buildFromImage(image) {
-  const isMobile = Math.min(innerWidth, innerHeight) < 700;
-  const maxSide = isMobile ? 420 : 680;
+  const mobile = isMobile();
+  const maxSide = mobile ? (isPortrait() ? 360 : 400) : 680;
   const scale = Math.min(1, maxSide / Math.max(image.naturalWidth, image.naturalHeight));
   const w = Math.max(1, Math.round(image.naturalWidth * scale));
   const h = Math.max(1, Math.round(image.naturalHeight * scale));
@@ -348,7 +380,7 @@ function buildFromImage(image) {
   ctx.drawImage(image, 0, 0, w, h);
   const d = ctx.getImageData(0, 0, w, h).data;
 
-  const worldH = 7.6;
+  const worldH = mobile ? (isPortrait() ? 6.4 : 6.8) : 7.6;
   const worldW = worldH * (w / h);
   const cell = Math.max(worldW / w, worldH / h);
   const pos = [], col = [], base = [], start = [];
@@ -389,8 +421,8 @@ function buildFromImage(image) {
 
 function buildBouquetParticles(image) {
   if (!image || !image.naturalWidth) return null;
-  const isMobile = Math.min(innerWidth, innerHeight) < 700;
-  const maxSide = isMobile ? 280 : 420;
+  const mobile = isMobile();
+  const maxSide = mobile ? 240 : 420;
   const scale = Math.min(1, maxSide / Math.max(image.naturalWidth, image.naturalHeight));
   const w = Math.max(1, Math.round(image.naturalWidth * scale));
   const h = Math.max(1, Math.round(image.naturalHeight * scale));
@@ -401,7 +433,7 @@ function buildBouquetParticles(image) {
   ctx.drawImage(image, 0, 0, w, h);
   const d = ctx.getImageData(0, 0, w, h).data;
 
-  const worldH = 5.2;
+  const worldH = isMobile() ? 4.4 : 5.2;
   const worldW = worldH * (w / h);
   const cell = Math.max(worldW / w, worldH / h);
   const pos = [], col = [], base = [], start = [];
@@ -559,7 +591,7 @@ function buildGiftParticles() {
   const worldW = worldH * (w / h);
   const cell = Math.max(worldW / w, worldH / h);
   const pos = [], col = [], base = [], start = [];
-  const ox = -0.55, oy = 0.05, oz = 0.15;
+  const ox = isMobile() ? 0 : -0.55, oy = 0.05, oz = 0.15;
 
   for (let y = 0; y < h; y++) {
     for (let x = 0; x < w; x++) {
@@ -602,11 +634,11 @@ function buildTextParticles(lines) {
   });
   const w = c.width, h = c.height;
   const d = ctx.getImageData(0, 0, w, h).data;
-  const worldH = 3.4;
+  const worldH = isMobile() ? (isPortrait() ? 2.6 : 2.9) : 3.4;
   const worldW = worldH * (w / h);
   const cell = Math.max(worldW / w, worldH / h);
   const pos = [], col = [], base = [], start = [];
-  const step = 2;
+  const step = isMobile() ? 3 : 2;
   for (let y = 0; y < h; y += step) {
     for (let x = 0; x < w; x += step) {
       const i = (y * w + x) << 2;
@@ -641,9 +673,11 @@ function setProgress(p, show) {
 function randomSpin() {
   if (!controls) return;
   controls.autoRotate = true;
-  controls.autoRotateSpeed = (Math.random() > 0.5 ? 1 : -1) * (1.6 + Math.random() * 2.4);
-  spinYaw = (Math.random() > 0.5 ? 1 : -1) * (0.35 + Math.random() * 0.75);
-  spinPitch = (Math.random() - 0.5) * 0.55;
+  const base = isMobile() ? 1.1 : 1.6;
+  const span = isMobile() ? 1.4 : 2.4;
+  controls.autoRotateSpeed = (Math.random() > 0.5 ? 1 : -1) * (base + Math.random() * span);
+  spinYaw = (Math.random() > 0.5 ? 1 : -1) * (0.28 + Math.random() * (isMobile() ? 0.45 : 0.75));
+  spinPitch = (Math.random() - 0.5) * (isMobile() ? 0.35 : 0.55);
 }
 function exitScene() {
   if (phase === 'exit') return;
@@ -679,12 +713,14 @@ function init() {
   scene.background = new THREE.Color(0x000000);
   scene.fog = new THREE.FogExp2(0x000000, 0.012);
 
-  camera = new THREE.PerspectiveCamera(48, innerWidth / innerHeight, .1, 100);
-  camera.position.set(0, 0.05, camZ0);
+  applyMobileView();
+  const fov = isMobile() ? (isPortrait() ? 56 : 50) : 48;
+  camera = new THREE.PerspectiveCamera(fov, innerWidth / innerHeight, .1, 100);
+  camera.position.set(0, isMobile() && isPortrait() ? 0.12 : 0.05, camZ0);
 
-  renderer = new THREE.WebGLRenderer({ antialias: false, powerPreference: 'high-performance' });
+  renderer = new THREE.WebGLRenderer({ antialias: false, powerPreference: 'high-performance', alpha: false });
   renderer.setSize(innerWidth, innerHeight);
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setPixelRatio(Math.min(devicePixelRatio, isMobile() ? 1.75 : 2));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   document.getElementById('sceneContainer').appendChild(renderer.domElement);
 
@@ -707,6 +743,14 @@ function init() {
   controls.enabled = false;
   controls.autoRotate = false;
   controls.autoRotateSpeed = 0.35;
+  controls.rotateSpeed = isMobile() ? 0.7 : 1;
+  controls.touches = { ONE: THREE.TOUCH.ROTATE, TWO: THREE.TOUCH.DOLLY_PAN };
+  if (isMobile()) {
+    controls.minDistance = 6.2;
+    controls.maxDistance = 16;
+    controls.maxPolarAngle = Math.PI * 0.72;
+    controls.minPolarAngle = Math.PI * 0.28;
+  }
 
   scene.add(new THREE.AmbientLight(0xfff2dd, 0.55));
   const sun = new THREE.DirectionalLight(0xffe6b0, 0.65);
@@ -759,9 +803,9 @@ function init() {
   scene.add(giftGroup);
   setBloom(0.3);
 
-  petalSystem = buildPetals(100);
-  dustSystem = buildSunDust(180);
-  burstSystem = buildBurst(120);
+  petalSystem = buildPetals(isMobile() ? 60 : 100);
+  dustSystem = buildSunDust(isMobile() ? 100 : 180);
+  burstSystem = buildBurst(isMobile() ? 80 : 120);
   scene.add(petalSystem);
   scene.add(dustSystem);
   scene.add(burstSystem);
@@ -835,12 +879,17 @@ function init() {
     setTimeout(() => giftRejectTip.classList.remove('show'), 1600);
   });
 
-  window.addEventListener('resize', () => {
+  const onResize = () => {
+    applyMobileView();
     camera.aspect = innerWidth / innerHeight;
+    camera.fov = isMobile() ? (isPortrait() ? 56 : 50) : 48;
     camera.updateProjectionMatrix();
     renderer.setSize(innerWidth, innerHeight);
     composer.setSize(innerWidth, innerHeight);
-  });
+    if (phase === 'done' || phase === 'main') setCamZ(camZ1);
+  };
+  window.addEventListener('resize', onResize);
+  if (window.visualViewport) window.visualViewport.addEventListener('resize', onResize);
 
   let lastTap = 0;
   let pointerDownAt = 0;
