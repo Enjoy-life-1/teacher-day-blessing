@@ -79,6 +79,13 @@ canvas{display:block}
 @keyframes endMidOut{0%{opacity:1;transform:translate(-50%,-50%) scale(1);filter:blur(0)}100%{opacity:0;transform:translate(-50%,-58%) scale(1.06);filter:blur(6px)}}
 @keyframes endTextIn{0%{opacity:0;transform:translate(-50%,-42%) scale(.88);filter:blur(4px)}100%{opacity:1;transform:translate(-50%,-50%) scale(1);filter:blur(0)}}
 @keyframes heartFloat{0%{opacity:0;transform:translateY(0) scale(.7)}20%{opacity:.45}100%{opacity:0;transform:translateY(-85vh) scale(1)}}
+#endFaceWrap{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;pointer-events:none;z-index:3;transition:opacity 1s ease}
+#endFaceWrap.show{opacity:1}
+#endFaceCanvas{width:min(58vw,260px);height:min(58vw,260px);filter:drop-shadow(0 0 14px rgba(140,160,200,.28))}
+#endFaceTip{margin-top:14px;color:rgba(200,210,230,.88);font-size:clamp(.9rem,3.5vw,1.1rem);letter-spacing:4px;opacity:0;transform:translateY(8px);transition:opacity .8s,transform .8s}
+#endFaceWrap.show #endFaceTip{opacity:1;transform:translateY(0);transition-delay:.45s}
+#endText.hideFinal{animation:endFinalOut .9s ease forwards}
+@keyframes endFinalOut{0%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-56%) scale(.94);filter:blur(4px)}}
 #giftMsgCount{display:none!important}
 @media (max-width:640px){
 #entryText{font-size:1.2rem;padding:0 18px;letter-spacing:1px}
@@ -124,6 +131,10 @@ canvas{display:block}
   <div id="endHearts"></div>
   <div id="endMidText">工作很忙<br>人也要开心</div>
   <div id="endText">给今日份的你加一份开心<br>添一分快乐</div>
+  <div id="endFaceWrap">
+    <canvas id="endFaceCanvas" width="320" height="320"></canvas>
+    <div id="endFaceTip">诡异~</div>
+  </div>
 </div>
 <div id="sceneContainer"></div>
 <div id="fadeOverlay"></div>
@@ -733,6 +744,100 @@ function randomSpin() {
   spinYaw = (Math.random() > 0.5 ? 1 : -1) * (0.28 + Math.random() * (isMobile() ? 0.45 : 0.75));
   spinPitch = (Math.random() - 0.5) * (isMobile() ? 0.35 : 0.55);
 }
+
+function buildPlayfulFaceParticles() {
+  const c = document.createElement('canvas');
+  c.width = 320; c.height = 320;
+  const ctx = c.getContext('2d');
+  ctx.clearRect(0, 0, 320, 320);
+  // cool pale face
+  const g = ctx.createRadialGradient(160, 148, 36, 160, 160, 118);
+  g.addColorStop(0, '#e8eef6');
+  g.addColorStop(1, '#b7c2d4');
+  ctx.fillStyle = g;
+  ctx.beginPath();
+  ctx.arc(160, 160, 108, 0, Math.PI * 2);
+  ctx.fill();
+  // half-lidded eyes
+  ctx.fillStyle = '#2a3344';
+  ctx.beginPath(); ctx.ellipse(118, 148, 13, 7, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(202, 148, 13, 7, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#9eb0c8';
+  ctx.beginPath(); ctx.arc(122, 146, 3.2, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(206, 146, 3.2, 0, Math.PI * 2); ctx.fill();
+  // flat cool brow
+  ctx.strokeStyle = '#3a4558';
+  ctx.lineWidth = 4;
+  ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(98, 128); ctx.lineTo(138, 132); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(182, 132); ctx.lineTo(222, 128); ctx.stroke();
+  // slight eerie smile
+  ctx.strokeStyle = '#3a4558';
+  ctx.lineWidth = 5;
+  ctx.beginPath();
+  ctx.moveTo(126, 206);
+  ctx.quadraticCurveTo(160, 218, 198, 206);
+  ctx.stroke();
+
+  const d = ctx.getImageData(0, 0, 320, 320).data;
+  const pts = [];
+  for (let y = 0; y < 320; y += 3) {
+    for (let x = 0; x < 320; x += 3) {
+      const i = (y * 320 + x) << 2;
+      if (d[i + 3] < 40) continue;
+      pts.push({
+        x, y,
+        r: d[i], g: d[i + 1], b: d[i + 2],
+        sx: 160 + (Math.random() - 0.5) * 420,
+        sy: 160 + (Math.random() - 0.5) * 420,
+        delay: Math.random() * 0.45
+      });
+    }
+  }
+  return pts;
+}
+
+function playEndFace() {
+  const wrap = document.getElementById('endFaceWrap');
+  const canvas = document.getElementById('endFaceCanvas');
+  if (!wrap || !canvas) return;
+  const ctx = canvas.getContext('2d');
+  const pts = buildPlayfulFaceParticles();
+  const scale = canvas.width / 320;
+  let t0 = null;
+  wrap.classList.add('show');
+  function frame(ts) {
+    if (!t0) t0 = ts;
+    const u = Math.min(1, (ts - t0) / 1600);
+    const e = 1 - Math.pow(1 - u, 3);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (const p of pts) {
+      const k = Math.max(0, Math.min(1, (e - p.delay) / (1 - p.delay || 1)));
+      const x = p.sx + (p.x - p.sx) * k;
+      const y = p.sy + (p.y - p.sy) * k;
+      ctx.fillStyle = `rgba(${p.r},${p.g},${p.b},${0.35 + k * 0.65})`;
+      ctx.fillRect(x * scale, y * scale, 3.2 * scale, 3.2 * scale);
+    }
+    if (u < 1) requestAnimationFrame(frame);
+    else {
+      // slight idle drift
+      let blink = 0;
+      const idle = () => {
+        blink += 0.02;
+        const bob = Math.sin(blink) * 1.5;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (const p of pts) {
+          ctx.fillStyle = `rgb(${p.r},${p.g},${p.b})`;
+          ctx.fillRect(p.x * scale, (p.y + bob) * scale, 3.2 * scale, 3.2 * scale);
+        }
+        if (phase === 'exit') requestAnimationFrame(idle);
+      };
+      requestAnimationFrame(idle);
+    }
+  }
+  requestAnimationFrame(frame);
+}
+
 function exitScene() {
   if (phase === 'exit') return;
   phase = 'exit';
@@ -778,6 +883,11 @@ function exitScene() {
       setTimeout(() => {
         endFinal.classList.add('show');
         spawnEndHearts();
+        setTimeout(() => {
+          endFinal.classList.add('hideFinal');
+          endHearts.innerHTML = '';
+          setTimeout(() => playEndFace(), 700);
+        }, 2800);
       }, 500);
     }, 2600);
   }, 700);
